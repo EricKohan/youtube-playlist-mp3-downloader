@@ -52,8 +52,8 @@ def download_audio(url, output_path="downloads"):
                 'preferredcodec': 'mp3',
                 'preferredquality': '192',
             },
+            {'key': 'FFmpegMetadata'},
         ],
-        'ffmpeg_location': r'C:\to_path\ffmpeg-8.0-full_build\bin',
         'quiet': False,
     }
 
@@ -72,5 +72,11 @@ if __name__ == "__main__":
     else:
         ids = get_video_ids(playlist_id, api_key)
         print(f"Found {len(ids)} videos")
-        for i in range(int(input("From:"))-1, int(input("To:"))):
+        start = int(input("From: "))-1
+        end = int(input("To: "))
+        ni = 1
+        for i in range(start, end):
             download_audio("https://www.youtube.com/watch?v="+ids[i])
+            print(f"\033[32mDownloaded {ni}/{end-start}\033[0m") # Text color green
+            ni += 1
+        print("\033[32mAll downloads complete!\033[0m") # Text color green
