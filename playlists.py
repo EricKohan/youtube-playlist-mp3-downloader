@@ -45,6 +45,8 @@ def download_audio(url, output_path="downloads"):
     # yt-dlp options
     ydl_opts = {
         'format': 'bestaudio/best',
+        'writethumbnail': True,
+        'embedthumbnail': True,
         'outtmpl': f'{output_path}/%(title)s.%(ext)s',  # Save using video title
         'postprocessors': [
             {  # Extract audio to mp3
@@ -53,6 +55,7 @@ def download_audio(url, output_path="downloads"):
                 'preferredquality': '192',
             },
             {'key': 'FFmpegMetadata'},
+            {'key': 'EmbedThumbnail'},
         ],
         'quiet': False,
     }
