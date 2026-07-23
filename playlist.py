@@ -42,17 +42,15 @@ def get_video_ids(playlist_id: str, api_key: str) -> list[str]:
 
 
 def download_audio(url: list[str], output_path: str = "downloads"):
-    # Make sure output folder exists
     os.makedirs(output_path, exist_ok=True)
 
-    # yt-dlp options
     ydl_opts = {
         "format": "bestaudio/best",
         "writethumbnail": True,
         "embedthumbnail": True,
-        "outtmpl": f"{output_path}/%(title)s.%(ext)s",  # Save using video title
+        "outtmpl": f"{output_path}/%(title)s.%(ext)s",
         "postprocessors": [
-            {  # Extract audio to mp3
+            {
                 "key": "FFmpegExtractAudio",
                 "preferredcodec": "mp3",
                 "preferredquality": "192",
@@ -84,6 +82,6 @@ if __name__ == "__main__":
         ni = 1
         for i in range(start, end):
             download_audio("https://www.youtube.com/watch?v=" + ids[i])
-            print(f"\033[32mDownloaded {ni}/{end-start}\033[0m")  # Text color green
+            print(f"\033[32mDownloaded {ni}/{end-start}\033[0m")
             ni += 1
-        print("\033[32mAll downloads complete!\033[0m")  # Text color green
+        print("\033[32mAll downloads complete!\033[0m")
