@@ -6,10 +6,12 @@ import yt_dlp
 
 load_dotenv()
 
+
 def extract_playlist_id(url: str) -> str | None:
     """Extract playlistId from YouTube URL."""
     match = re.search(r"[?&]list=([A-Za-z0-9_-]+)", url)
     return match.group(1) if match else None
+
 
 def get_video_ids(playlist_id: str, api_key: str) -> list[str]:
     """Fetch all video IDs from a YouTube playlist using the Data API."""
@@ -18,7 +20,7 @@ def get_video_ids(playlist_id: str, api_key: str) -> list[str]:
         "part": "contentDetails",
         "playlistId": playlist_id,
         "maxResults": 50,
-        "key": api_key
+        "key": api_key,
     }
     video_ids = []
 
@@ -38,26 +40,27 @@ def get_video_ids(playlist_id: str, api_key: str) -> list[str]:
 
     return video_ids
 
-def download_audio(url, output_path="downloads"):
+
+def download_audio(url: list[str], output_path: str = "downloads"):
     # Make sure output folder exists
     os.makedirs(output_path, exist_ok=True)
 
     # yt-dlp options
     ydl_opts = {
-        'format': 'bestaudio/best',
-        'writethumbnail': True,
-        'embedthumbnail': True,
-        'outtmpl': f'{output_path}/%(title)s.%(ext)s',  # Save using video title
-        'postprocessors': [
+        "format": "bestaudio/best",
+        "writethumbnail": True,
+        "embedthumbnail": True,
+        "outtmpl": f"{output_path}/%(title)s.%(ext)s",  # Save using video title
+        "postprocessors": [
             {  # Extract audio to mp3
-                'key': 'FFmpegExtractAudio',
-                'preferredcodec': 'mp3',
-                'preferredquality': '192',
+                "key": "FFmpegExtractAudio",
+                "preferredcodec": "mp3",
+                "preferredquality": "192",
             },
-            {'key': 'FFmpegMetadata'},
-            {'key': 'EmbedThumbnail'},
+            {"key": "FFmpegMetadata"},
+            {"key": "EmbedThumbnail"},
         ],
-        'quiet': False,
+        "quiet": False,
     }
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -65,9 +68,10 @@ def download_audio(url, output_path="downloads"):
         ydl.download([url])
         print("Download complete!")
 
+
 if __name__ == "__main__":
     playlist_url = input("Enter YouTube playlist URL: ").strip()
-    api_key = os.getenv('API_KEY')
+    api_key = os.getenv("API_KEY")
 
     playlist_id = extract_playlist_id(playlist_url)
     if not playlist_id:
@@ -75,11 +79,11 @@ if __name__ == "__main__":
     else:
         ids = get_video_ids(playlist_id, api_key)
         print(f"Found {len(ids)} videos")
-        start = int(input("From: "))-1
+        start = int(input("From: ")) - 1
         end = int(input("To: "))
         ni = 1
         for i in range(start, end):
-            download_audio("https://www.youtube.com/watch?v="+ids[i])
-            print(f"\033[32mDownloaded {ni}/{end-start}\033[0m") # Text color green
+            download_audio("https://www.youtube.com/watch?v=" + ids[i])
+            print(f"\033[32mDownloaded {ni}/{end-start}\033[0m")  # Text color green
             ni += 1
-        print("\033[32mAll downloads complete!\033[0m") # Text color green
+        print("\033[32mAll downloads complete!\033[0m")  # Text color green
