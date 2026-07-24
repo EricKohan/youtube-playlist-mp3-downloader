@@ -41,7 +41,7 @@ def get_video_ids(playlist_id: str, api_key: str) -> list[str]:
     return video_ids
 
 
-def download_audio(url: list[str], output_path: str = "downloads"):
+def download_audio(url: str, output_path: str = "downloads"):
     os.makedirs(output_path, exist_ok=True)
 
     ydl_opts = {
@@ -77,11 +77,12 @@ if __name__ == "__main__":
     else:
         ids = get_video_ids(playlist_id, api_key)
         print(f"Found {len(ids)} videos")
-        start = int(input("From: ")) - 1
+        start = int(input("From: "))
         end = int(input("To: "))
-        ni = 1
-        for i in range(start, end):
-            download_audio("https://www.youtube.com/watch?v=" + ids[i])
-            print(f"\033[32mDownloaded {ni}/{end-start}\033[0m")
-            ni += 1
+        selected_ids = ids[start - 1 : end]
+        urls = ["https://www.youtube.com/watch?v=" + item for item in selected_ids]
+        for i in range(0, len(urls)):
+            download_audio(urls[i])
+            print(f"\033[32mDownloaded {i}/{len(urls)}\033[0m")
+        print("")
         print("\033[32mAll downloads complete!\033[0m")
