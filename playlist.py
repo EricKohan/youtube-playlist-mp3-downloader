@@ -49,6 +49,7 @@ def download_audio(url: str, output_path: str = "downloads"):
         "writethumbnail": True,
         "embedthumbnail": True,
         "outtmpl": f"{output_path}/%(title)s.%(ext)s",
+        "js_runtimes": {"node": {"path": None}},
         "postprocessors": [
             {
                 "key": "FFmpegExtractAudio",
