@@ -83,6 +83,6 @@ if __name__ == "__main__":
         urls = ["https://www.youtube.com/watch?v=" + item for item in selected_ids]
         for i in range(0, len(urls)):
             download_audio(urls[i])
-            print(f"\033[32mDownloaded {i}/{len(urls)}\033[0m")
+            print(f"\033[32mDownloaded {i+1}/{len(urls)}\033[0m")
         print("")
         print("\033[32mAll downloads complete!\033[0m")
